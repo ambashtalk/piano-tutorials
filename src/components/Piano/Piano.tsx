@@ -1,17 +1,26 @@
 import React, { useEffect } from 'react'
-import Key from '../Key/Key'
-import { handleKeyPlayEvents, handleKeyStopEvents } from '../../PianoEngine'
+import Key from 'src/components/Key/Key'
+import { handleKeyPlayEvents, handleKeyStopEvents } from 'src/utils/PianoEngine'
 import { StyledPiano } from './PianoStyles'
+import { pressedKeys } from '../../utils/PianoEngine'
 
 const Piano: React.FC = () => {
+  let map: pressedKeys = {}
   useEffect(() => {
-    document.addEventListener('keydown', event => {
-      handleKeyPlayEvents(event.key)
+    document.addEventListener('keydown', (event) => {
+      if (!event.repeat && !map[event.key]) {
+        map[event.key] = true
+        handleKeyPlayEvents(map)
+        console.log(event.key, 'down')
+      }
     })
-    document.addEventListener('keyup', event => {
-      handleKeyStopEvents(event.key)
+
+    document.addEventListener('keyup', (event) => {
+      map[event.key] = false
+      console.log(event.key, 'up')
+      handleKeyStopEvents(map)
     })
-  }, [])
+  })
 
   return (
     <StyledPiano id="piano">

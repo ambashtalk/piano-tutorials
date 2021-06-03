@@ -1,5 +1,5 @@
-import React from 'react'
-import { handleMousePlayEvents, handleMouseStopEvents } from 'src/PianoEngine'
+import React, { MouseEvent } from 'react'
+import { handleMousePlayEvents, handleMouseStopEvents } from 'src/utils/PianoEngine'
 import { StlyedBlackKey } from './BlackKeyStyles'
 
 interface props {
@@ -8,11 +8,13 @@ interface props {
 }
 
 const BlackKey: React.FC<props> = ({ keyName, keyTone }) => {
-  const handleMouseDownEvent = () => {
+  const handleMouseDownEvent = (event: MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation()
     handleMousePlayEvents(keyTone)
   }
-  const handleMouseUpEvent = () => {
-    handleMouseStopEvents()
+  const handleMouseUpEvent = (event: MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation()
+    handleMouseStopEvents(keyTone)
   }
   return (
     <StlyedBlackKey data-note={keyTone} onMouseDown={handleMouseDownEvent} onMouseUp={handleMouseUpEvent}>
